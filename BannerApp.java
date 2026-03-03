@@ -3,62 +3,41 @@ import java.util.Map;
 
 public class BannerApp {
 
-    // Static Inner Class for Pattern Encapsulation
-    static class CharacterPattern {
-        private char character;
-        private String[] pattern;
+    // Centralized Pattern Storage using HashMap
+    private static final Map<Character, String[]> patternMap = new HashMap<>();
 
-        // Constructor
-        public CharacterPattern(char character, String[] pattern) {
-            this.character = character;
-            this.pattern = pattern;
-        }
+    // Static block to initialize patterns
+    static {
 
-        // Getter
-        public String[] getPattern() {
-            return pattern;
-        }
-    }
+        patternMap.put('O', new String[]{
+                " ***** ",
+                "**   **",
+                "**   **",
+                "**   **",
+                "**   **",
+                "**   **",
+                " ***** "
+        });
 
-    // CharacterPatternMap to manage mappings
-    static class CharacterPatternMap {
-        private static final Map<Character, CharacterPattern> patternMap = new HashMap<>();
+        patternMap.put('P', new String[]{
+                "****** ",
+                "**   **",
+                "**   **",
+                "****** ",
+                "**     ",
+                "**     ",
+                "**     "
+        });
 
-        static {
-            patternMap.put('O', new CharacterPattern('O', new String[]{
-                    " ***** ",
-                    "**   **",
-                    "**   **",
-                    "**   **",
-                    "**   **",
-                    "**   **",
-                    " ***** "
-            }));
-
-            patternMap.put('P', new CharacterPattern('P', new String[]{
-                    "****** ",
-                    "**   **",
-                    "**   **",
-                    "****** ",
-                    "**     ",
-                    "**     ",
-                    "**     "
-            }));
-
-            patternMap.put('S', new CharacterPattern('S', new String[]{
-                    " ***** ",
-                    "**     ",
-                    "**     ",
-                    " ***** ",
-                    "     **",
-                    "     **",
-                    " ***** "
-            }));
-        }
-
-        public static String[] getPattern(char ch) {
-            return patternMap.get(ch).getPattern();
-        }
+        patternMap.put('S', new String[]{
+                " ***** ",
+                "**     ",
+                "**     ",
+                " ***** ",
+                "     **",
+                "     **",
+                " ***** "
+        });
     }
 
     public static void main(String[] args) {
@@ -70,8 +49,13 @@ public class BannerApp {
             StringBuilder line = new StringBuilder();
 
             for (char ch : word.toCharArray()) {
-                line.append(CharacterPatternMap.getPattern(ch)[row]);
-                line.append("   ");
+
+                String[] pattern = patternMap.get(ch);
+
+                if (pattern != null) {
+                    line.append(pattern[row]);
+                    line.append("   ");
+                }
             }
 
             System.out.println(line);
